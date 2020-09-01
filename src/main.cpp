@@ -140,7 +140,7 @@ void led_red_breathe() {
 }
 
 void setup() {
-  Serial.begin(9600);
+  // Serial.begin(9600);
 
   pinMode(PIN_R, OUTPUT);
   pinMode(PIN_G, OUTPUT);
@@ -183,7 +183,7 @@ void loop() {
     // do something else
   } 
 
-  Serial.println(analogRead(PIN_IR_ANALOG));
+  // Serial.println(analogRead(PIN_IR_ANALOG));
   
   // delay ticks
   white_led_tick();
