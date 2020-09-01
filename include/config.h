@@ -6,6 +6,7 @@
 #define PIN_W 9
 
 #define PIN_IR 16
+#define PIN_IR_ANALOG A0
 
 #define PIN_SWITCH_1 15
 #define PIN_SWITCH_2 14

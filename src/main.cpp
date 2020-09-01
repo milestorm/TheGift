@@ -28,14 +28,21 @@ int led_red_breathing_delay = 15;
 
 
 // detects IR module obstacle
-bool detect_ir() {
+bool detect_ir(bool analog_mode = false) {
   bool ir_on = false;
-  if (digitalRead(PIN_IR) == HIGH) {
-    ir_on = true;
+  if (analog_mode == true) {
+    if (analogRead(PIN_IR_ANALOG) <= 835) { // magic constant
+      ir_on = false;
+    } else {
+      ir_on = true;
+    }
   } else {
-    ir_on = false;
+    if (digitalRead(PIN_IR) == HIGH) {
+      ir_on = true;
+    } else {
+      ir_on = false;
+    }
   }
-
   return ir_on;
 }
 
@@ -133,6 +140,8 @@ void led_red_breathe() {
 }
 
 void setup() {
+  Serial.begin(9600);
+
   pinMode(PIN_R, OUTPUT);
   pinMode(PIN_G, OUTPUT);
   pinMode(PIN_B, OUTPUT);
@@ -149,7 +158,7 @@ void setup() {
 
 void loop() {
   // detect obstacle (car key) insertion into the box
-  if ((detect_ir() == true) && (ir_detected == false)) {
+  if ((detect_ir(true) == true) && (ir_detected == false)) {
     // key NOT inserted
     ir_detected = true;
     digitalWrite(PIN_R, HIGH);
@@ -157,7 +166,7 @@ void loop() {
     want_turn_white_on = true;
     led_red_breathing_active = true;
   }
-  if ((detect_ir() == false) && (ir_detected == true)) {
+  if ((detect_ir(true) == false) && (ir_detected == true)) {
     // key inserted
     digitalWrite(PIN_R, LOW);
     digitalWrite(PIN_G, HIGH);
@@ -173,6 +182,8 @@ void loop() {
   if (switch_state[0] == true) {
     // do something else
   } 
+
+  Serial.println(analogRead(PIN_IR_ANALOG));
   
   // delay ticks
   white_led_tick();
