@@ -3,7 +3,7 @@
 #define PIN_R 3
 #define PIN_G 5
 #define PIN_B 6
-#define PIN_W 8
+#define PIN_W 9
 
 #define PIN_IR 16
 
