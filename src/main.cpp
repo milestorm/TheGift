@@ -24,7 +24,7 @@ bool ir_detected = true;
 bool led_red_breathing_active = true;
 bool led_red_breathing_up = true;
 int led_red_breathing_value = 0;
-int led_red_breathing_delay = 5; // 10 ms
+int led_red_breathing_delay = 15;
 
 
 // detects IR module obstacle
