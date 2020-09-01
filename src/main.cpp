@@ -13,12 +13,12 @@ VirtualDelay whiteDelay;
 OneButton switch_1(PIN_SWITCH_1, true);
 OneButton switch_2(PIN_SWITCH_2, true);
 
-unsigned long white_on_time = 1 * 60 * 1000; // one minute
+unsigned long white_on_time = 30 * 1000; // 30 seconds
 unsigned long white_on_time_previous = 0;
 bool turn_white_on = false;
 bool want_turn_white_on = false;
 
-bool ir_detected = false;
+bool ir_detected = true;
 
 bool detect_ir() {
   bool ir_on = false;
@@ -53,19 +53,23 @@ void setup() {
   // initial turn on
   digitalWrite(PIN_R, HIGH);
   digitalWrite(PIN_G, LOW);
+
+  digitalWrite(PIN_W, LOW);
 }
 
 void loop() {
   if ((detect_ir() == true) && (ir_detected == false)) {
     ir_detected = true;
-    digitalWrite(PIN_R, LOW);
-    digitalWrite(PIN_G, HIGH);
+    digitalWrite(PIN_R, HIGH);
+    digitalWrite(PIN_G, LOW);
     want_turn_white_on = true;
   }
 
   if ((detect_ir() == false) && (ir_detected == true)) {
-    digitalWrite(PIN_R, HIGH);
-    digitalWrite(PIN_G, LOW);
+    digitalWrite(PIN_R, LOW);
+    digitalWrite(PIN_G, HIGH);
+    ir_detected = false;
+    want_turn_white_on = true;
   }
 
   white_led_tick();
