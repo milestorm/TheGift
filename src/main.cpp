@@ -2,6 +2,7 @@
 #include <avdweb_VirtualDelay.h>
 #include <OneButton.h>
 #include <config.h>
+#include <ToneSfx.h>
 
 // TODO
 // add some piezo buzzer for annoying melody? :)
@@ -9,6 +10,10 @@
 
 VirtualDelay whiteDelay;
 VirtualDelay redBreatheDelay;
+
+ToneSfx beeper(PIN_BEEPER);
+
+bool beeper_on = true;
 
 bool switch_state[2] = {false, false};
 int switch_pin[2] = {PIN_SWITCH_1, PIN_SWITCH_2};
@@ -52,7 +57,7 @@ void led_white_fadeout(int delay_time) {
     analogWrite(PIN_W, i);
     delay(delay_time);
   }
-  digitalWrite(PIN_W, LOW);  
+  digitalWrite(PIN_W, LOW);
 }
 
 // fades in white led
@@ -61,7 +66,7 @@ void led_white_fadein(int delay_time) {
     analogWrite(PIN_W, i);
     delay(delay_time);
   }
-  digitalWrite(PIN_W, LOW);  
+  digitalWrite(PIN_W, LOW);
 }
 
 // white led turn on blinking effect
@@ -102,7 +107,7 @@ void white_led_tick() {
     } else {
       digitalWrite(PIN_W, HIGH);
     }
-    // digitalWrite(PIN_W, HIGH);    
+    // digitalWrite(PIN_W, HIGH);
     whiteDelay.start(white_on_time);
     if (whiteDelay.elapsed()) {
         //digitalWrite(PIN_W, LOW);
@@ -124,19 +129,19 @@ void led_red_breathe() {
         if (led_red_breathing_value >= 255) {
           led_red_breathing_up = false;
         }
-        
+
       } else {
         led_red_breathing_value -= 1;
         if (led_red_breathing_value <= 0) {
           led_red_breathing_up = true;
         }
       }
-      
+
     }
   } else {
     digitalWrite(PIN_R, LOW);
   }
-   
+
 }
 
 void setup() {
@@ -154,6 +159,12 @@ void setup() {
 
   digitalWrite(PIN_G, LOW);
   digitalWrite(PIN_W, LOW);
+
+  // when powered on, determines if sound will be ON or OFF
+  switch_tick();
+  if (switch_state[0] == true) {
+    beeper_on = false;
+  }
 }
 
 void loop() {
@@ -181,10 +192,10 @@ void loop() {
   }
   if (switch_state[0] == true) {
     // do something else
-  } 
+  }
 
   // Serial.println(analogRead(PIN_IR_ANALOG));
-  
+
   // delay ticks
   white_led_tick();
   led_red_breathe();

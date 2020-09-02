@@ -10,3 +10,5 @@
 
 #define PIN_SWITCH_1 15
 #define PIN_SWITCH_2 14
+
+#define PIN_BEEPER 10
