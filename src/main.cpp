@@ -15,6 +15,9 @@ ToneSfx beeper(PIN_BEEPER);
 
 bool beeper_on = true;
 
+const char *tone_insert[] = {"T:1245:200", "T:622:200", "T:932:200", "T:831:400", "P:50", "T:1245:200", "P:50", "T:932:500", SFX_END};
+const char *tone_remove[] = {"T:831,200", "P:50", "T:622,200", "P:50", "T:415,200", "P:50", "T:466,500", SFX_END};
+
 bool switch_state[2] = {false, false};
 int switch_pin[2] = {PIN_SWITCH_1, PIN_SWITCH_2};
 
@@ -174,6 +177,9 @@ void loop() {
     ir_detected = true;
     digitalWrite(PIN_R, HIGH);
     digitalWrite(PIN_G, LOW);
+    if (beeper_on == true) {
+      beeper.play(tone_remove);
+    }
     want_turn_white_on = true;
     led_red_breathing_active = true;
   }
@@ -181,6 +187,9 @@ void loop() {
     // key inserted
     digitalWrite(PIN_R, LOW);
     digitalWrite(PIN_G, HIGH);
+    if (beeper_on == true) {
+      beeper.play(tone_insert);
+    }
     ir_detected = false;
     want_turn_white_on = true;
     led_red_breathing_active = false;
@@ -200,4 +209,5 @@ void loop() {
   white_led_tick();
   led_red_breathe();
   switch_tick();
+  beeper.tick();
 }
